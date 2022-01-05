@@ -13,10 +13,10 @@ const Map = () => {
   const width = 500;
   const height = 500;
 
-  let projection: any = d3
-    .geoMercator()
-    .fitSize([width, height], geoJson as any);
-  let pathGenerator: any = d3.geoPath().projection(projection);
+  let projection: any = useRef(
+    d3.geoMercator().fitSize([width, height], geoJson as any)
+  );
+  let pathGenerator: any = useRef(d3.geoPath().projection(projection));
 
   // The geoJSON file takes a while to load, even though it is a local file, it's quite large
   // this useEffect will kickoff the convertGeoJsonToPaths function after we are sure
@@ -41,7 +41,7 @@ const Map = () => {
     // Here we can filter features based on any info, then add them to the feature collection
     // This will allow us to fit only the filtered features in the map
     let filteredFeatures = geoJson.features.filter((d, idx) => {
-      if (d.properties.continent === 'North America') {
+      if (d.properties.continent === 'Africa') {
         featureCollection.features.push(d);
         return true;
       }
@@ -51,17 +51,17 @@ const Map = () => {
     // console.log(filteredFeatures);
 
     // create new project and pathGenerator based on the features in the featureCollection
-    projection = d3
+    projection.current = d3
       .geoMercator()
       .fitSize([width, height], featureCollection as any);
-    pathGenerator = d3.geoPath().projection(projection);
+    pathGenerator.current = d3.geoPath().projection(projection.current);
 
     // create the individual paths
     const paths = filteredFeatures.map((d, idx) => {
       return (
         <path
           key={'path' + idx}
-          d={pathGenerator(d as any)}
+          d={pathGenerator.current(d as any)}
           fill='#dedede'
           stroke='black'
         />
@@ -71,9 +71,30 @@ const Map = () => {
     setPathElements(paths as any);
   };
 
+  const handleClick = (e: any) => {
+    console.log(e);
+    console.log(svgRef.current?.getBoundingClientRect());
+
+    const boundingRect = svgRef.current?.getBoundingClientRect();
+    let svgX = e.clientX;
+    let svgY = e.clientY;
+
+    if (boundingRect) {
+      svgX = svgX - boundingRect.left;
+      svgY = svgY - boundingRect.top;
+    }
+
+    let latlong = projection.current.invert([svgX, svgY]);
+    console.log(latlong);
+  };
+
   return (
     <>
-      <svg width={500} height={500} ref={svgRef}>
+      <svg
+        width={500}
+        height={500}
+        ref={svgRef}
+        onClick={(e) => handleClick(e)}>
         <g>{pathElements}</g>
       </svg>
     </>
