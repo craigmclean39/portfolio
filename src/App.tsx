@@ -14,24 +14,37 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       // console.log('trying to fetch data');
-      const response = await axios({
-        method: 'get',
-        url: 'http://localhost:3000/map',
-        responseType: 'json',
-      });
 
-      // console.log(response);
+      try {
+        const response = await axios({
+          method: 'get',
+          url: 'http://localhost:3000/map',
+          responseType: 'json',
+        });
 
-      setTraceData(response.data);
+        // console.log(response);
+
+        setTraceData(response.data);
+      } catch (error) {
+        setTraceData([
+          {
+            country: 'CA',
+            city: 'Squamish',
+            ll: [0, 0],
+            time: 0,
+          },
+        ]);
+      }
     }
 
     fetchData();
   }, []);
   return (
     <div className='App'>
-      <Map traceData={traceData} />
       <Header />
       <Body />
+      <div className='map-overlay'></div>
+      <Map traceData={traceData} />
     </div>
   );
 }
