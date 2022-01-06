@@ -1,9 +1,31 @@
 :root {
   --bg-color: #272640;
+  --font-color: #008c8f;
+
+  --header-color: #212f45;
 }
 
 body {
   min-height: 100vh;
   min-width: 100vw;
   background-color: var(--bg-color);
+  color: var(--font-color);
+  box-sizing: border-box;
+}
+
+header {
+  min-width: 100vw;
+  border-bottom: solid 1px var(--font-color);
+  z-index: 1000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--header-color);
+  box-sizing: border-box;
+}
+
+.inner-header {
+  width: clamp(200px, 100vw, 1024px);
 }
