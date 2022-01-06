@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './css/reset.css';
+import './css/styles.css';
+
+import { useEffect, useState } from 'react';
 import Map from './components/map';
 import axios from 'axios';
 import { Hop } from './types/trace';
+import Body from './components/body';
+import Header from './components/header';
 
 function App() {
   const [traceData, setTraceData] = useState<Hop[]>([]);
@@ -27,6 +30,8 @@ function App() {
   return (
     <div className='App'>
       <Map traceData={traceData} />
+      <Header />
+      <Body />
     </div>
   );
 }

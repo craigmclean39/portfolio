@@ -1,0 +1,12 @@
+:root {
+  --map-bg-color: #212f45;
+  --map-border-color: #006466;
+}
+
+.trace-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}

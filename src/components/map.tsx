@@ -4,6 +4,7 @@ import geoJson from '../data/mapdata.json';
 import { Hop } from '../types/trace';
 import { FeatureCollection } from '../types/d3Types';
 import { geoJsonFilter } from '../utilities/geoJsonUtils';
+import '../css/map.css';
 
 export interface MapProps {
   traceData: Hop[];
@@ -13,13 +14,21 @@ const Map: React.FC<MapProps> = ({ traceData }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [pathElements, setPathElements] = useState(null);
   const [geoJsonReady, setGeoJsonReady] = useState(false);
-  const width = 500;
-  const height = 500;
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   let projection: any = useRef(
     d3.geoMercator().fitSize([width, height], geoJson as any)
   );
   let pathGenerator: any = useRef(d3.geoPath().projection(projection));
+
+  useEffect(() => {
+    if (svgRef.current) {
+      const boundingRect = svgRef.current?.getBoundingClientRect();
+      setWidth(boundingRect?.width);
+      setHeight(boundingRect?.height);
+    }
+  }, [svgRef]);
 
   // The geoJSON file takes a while to load, even though it is a local file, it's quite large
   // this useEffect will kickoff the convertGeoJsonToPaths function after we are sure
@@ -76,8 +85,8 @@ const Map: React.FC<MapProps> = ({ traceData }) => {
         <path
           key={'path' + index}
           d={pathGenerator.current(d as any)}
-          fill='#dedede'
-          stroke='black'
+          fill='var(--map-bg-color)'
+          stroke='var(--map-border-color)'
         />
       );
     });
@@ -104,11 +113,7 @@ const Map: React.FC<MapProps> = ({ traceData }) => {
 
   return (
     <>
-      <svg
-        width={500}
-        height={500}
-        ref={svgRef}
-        onClick={(e) => handleClick(e)}>
+      <svg className='trace-map' ref={svgRef} onClick={(e) => handleClick(e)}>
         <g>{pathElements}</g>
       </svg>
     </>

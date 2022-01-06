@@ -1,0 +1,9 @@
+:root {
+  --bg-color: #272640;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: var(--bg-color);
+}
