@@ -26,7 +26,7 @@ function App() {
   }, []);
   return (
     <div className='App'>
-      <Map data={traceData} />
+      <Map traceData={traceData} />
     </div>
   );
 }

@@ -2,17 +2,14 @@ import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
 import geoJson from '../data/mapdata.json';
 import { Hop } from '../types/trace';
-
-interface fColl {
-  type: string;
-  features: any[];
-}
+import { FeatureCollection } from '../types/d3Types';
+import { geoJsonFilter } from '../utilities/geoJsonUtils';
 
 export interface MapProps {
-  data: Hop[];
+  traceData: Hop[];
 }
 
-const Map: React.FC<MapProps> = ({ data }) => {
+const Map: React.FC<MapProps> = ({ traceData }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [pathElements, setPathElements] = useState(null);
   const [geoJsonReady, setGeoJsonReady] = useState(false);
@@ -31,62 +28,53 @@ const Map: React.FC<MapProps> = ({ data }) => {
     async function fetchMapData() {
       await fetch('../data/mapdata.json');
       setGeoJsonReady(true);
-      // covertGeoJsonToPaths();
     }
 
     fetchMapData();
   }, []);
 
   useEffect(() => {
-    // console.log('useEffect');
-    // console.log(`Data: ${data}`);
-    // console.log(`GeoJsonReader: ${geoJsonReady}`);
-
-    if (geoJsonReady && data) {
+    if (geoJsonReady && traceData.length > 0) {
       covertGeoJsonToPaths();
     }
-  }, [data, geoJsonReady]);
+  }, [traceData, geoJsonReady]);
 
   const covertGeoJsonToPaths = () => {
+    console.log(traceData);
     // When calling the fitSize function on the projection, we need a collection of features,
     // this is the format that the function expects
     let featureCollection = {
       type: 'FeatureCollection',
       features: [],
-    } as fColl;
+    } as FeatureCollection;
 
     // Here we can filter features based on any info, then add them to the feature collection
     // This will allow us to fit only the filtered features in the map
-    //Currently filtering based on coutries present in our trace hop data
-    let filteredFeatures = geoJson.features.filter((d, idx) => {
-      if (
-        data.some((hop) => {
-          if (hop.country === d.properties.iso_a2) {
-            return true;
-          }
-          return false;
-        })
-      ) {
-        featureCollection.features.push(d);
-        return true;
-      }
-
-      return false;
+    // Currently filtering based on countries present in our trace hop data
+    const propertyValues = traceData.map((hop) => {
+      return hop.country;
     });
 
-    // console.log(filteredFeatures);
+    const filteredFeatures = geoJsonFilter(geoJson, [
+      { propertyName: 'iso_a2', propertyValues: propertyValues },
+    ]);
+
+    filteredFeatures.forEach((feature: any) =>
+      featureCollection.features.push(feature)
+    );
 
     // create new project and pathGenerator based on the features in the featureCollection
     projection.current = d3
-      .geoMercator()
+      .geoAlbers()
       .fitSize([width, height], featureCollection as any);
     pathGenerator.current = d3.geoPath().projection(projection.current);
 
     // create the individual paths
-    const paths = filteredFeatures.map((d, idx) => {
+    const paths = filteredFeatures.map((d: any, index: number) => {
+      console.log(d);
       return (
         <path
-          key={'path' + idx}
+          key={'path' + index}
           d={pathGenerator.current(d as any)}
           fill='#dedede'
           stroke='black'
