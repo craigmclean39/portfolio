@@ -4,11 +4,20 @@
   --map-overlay-color: rgba(0, 0, 0, 0.2);
 }
 
-.trace-map {
+.map-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trace-map {
+  width: clamp(100px, 100vw, 1024px);
   height: 100vh;
 }
 

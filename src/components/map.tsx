@@ -112,11 +112,11 @@ const Map: React.FC<MapProps> = ({ traceData }) => {
   };
 
   return (
-    <>
+    <div className='map-container'>
       <svg className='trace-map' ref={svgRef} onClick={(e) => handleClick(e)}>
         <g>{pathElements}</g>
       </svg>
-    </>
+    </div>
   );
 };
 
