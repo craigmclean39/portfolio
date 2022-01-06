@@ -1,15 +1,21 @@
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
 import geoJson from '../data/mapdata.json';
+import { Hop } from '../types/trace';
 
 interface fColl {
   type: string;
   features: any[];
 }
 
-const Map = () => {
+export interface MapProps {
+  data: Hop[];
+}
+
+const Map: React.FC<MapProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [pathElements, setPathElements] = useState(null);
+  const [geoJsonReady, setGeoJsonReady] = useState(false);
   const width = 500;
   const height = 500;
 
@@ -24,11 +30,22 @@ const Map = () => {
   useEffect(() => {
     async function fetchMapData() {
       await fetch('../data/mapdata.json');
-      covertGeoJsonToPaths();
+      setGeoJsonReady(true);
+      // covertGeoJsonToPaths();
     }
 
     fetchMapData();
   }, []);
+
+  useEffect(() => {
+    // console.log('useEffect');
+    // console.log(`Data: ${data}`);
+    // console.log(`GeoJsonReader: ${geoJsonReady}`);
+
+    if (geoJsonReady && data) {
+      covertGeoJsonToPaths();
+    }
+  }, [data, geoJsonReady]);
 
   const covertGeoJsonToPaths = () => {
     // When calling the fitSize function on the projection, we need a collection of features,
@@ -40,11 +57,20 @@ const Map = () => {
 
     // Here we can filter features based on any info, then add them to the feature collection
     // This will allow us to fit only the filtered features in the map
+    //Currently filtering based on coutries present in our trace hop data
     let filteredFeatures = geoJson.features.filter((d, idx) => {
-      if (d.properties.continent === 'Africa') {
+      if (
+        data.some((hop) => {
+          if (hop.country === d.properties.iso_a2) {
+            return true;
+          }
+          return false;
+        })
+      ) {
         featureCollection.features.push(d);
         return true;
       }
+
       return false;
     });
 
