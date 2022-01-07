@@ -3,6 +3,18 @@
   --font-color: #008c8f;
 
   --header-color: #212f45;
+
+  --hero-text-color: white;
+  --hero-name-color: #00b5b8;
+  --hero-subtitle-color: #006466;
+
+  --button-bg-color: #572c63;
+  --button-hover-color: #572c63;
+  --button-border-color: #006466;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -11,6 +23,7 @@ body {
   background-color: var(--bg-color);
   color: var(--font-color);
   box-sizing: border-box;
+  font-family: 'Space Mono';
 }
 
 header {
@@ -24,8 +37,106 @@ header {
   padding: 16px;
   background-color: var(--header-color);
   box-sizing: border-box;
+  height: 50px;
+}
+
+section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+section:first-of-type {
+  height: calc(100vh - 50px);
 }
 
 .inner-header {
   width: clamp(200px, 100vw, 1024px);
+}
+
+main {
+  display: flex;
+  width: 100vw;
+  justify-content: center;
+  position: relative;
+  z-index: 1000;
+}
+
+.inner-main {
+  width: clamp(200px, 100vw, 1024px);
+}
+
+.hero {
+  padding: 16px;
+}
+
+.hero-title {
+  color: var(--hero-text-color);
+  font-size: 3rem;
+  padding-bottom: 0.25rem;
+}
+
+.hero-name {
+  color: var(--hero-name-color);
+}
+
+.hero-subtitle {
+  color: var(--hero-subtitle-color);
+  font-size: 1.5rem;
+}
+
+.hero-icons {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  fill: var(--font-color);
+}
+
+.icon:hover {
+  fill: var(--hero-text-color);
+}
+
+.icon-link {
+  cursor: pointer;
+}
+
+.icon-link:visited {
+}
+
+.button {
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 8px 16px 8px 16px;
+  background-color: var(--button-bg-color);
+  color: var(--hero-text-color);
+  border: solid 1px transparent;
+}
+
+.button:hover {
+  border: solid 2px var(--button-border-color);
+}
+
+.button:visited {
+}
+
+.hero > p {
+  color: white;
+}
+
+.nav-down {
+  display: flex;
+  width: 100;
+  justify-content: center;
+}
+
+.nav-icon {
+  fill: var(--font-color);
+  padding-bottom: 1rem;
+  cursor: pointer;
 }
