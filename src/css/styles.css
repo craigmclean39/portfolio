@@ -8,13 +8,14 @@
   --hero-name-color: #00b5b8;
   --hero-subtitle-color: #006466;
 
-  --button-bg-color: #572c63;
-  --button-hover-color: #572c63;
+  --button-bg-color: #144552;
+  --button-hover-color: #144552;
   --button-border-color: #006466;
 }
 
 html {
   scroll-behavior: smooth;
+  box-sizing: border-box;
 }
 
 body {
@@ -45,6 +46,8 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 section:first-of-type {
@@ -84,6 +87,7 @@ main {
 .hero-subtitle {
   color: var(--hero-subtitle-color);
   font-size: 1.5rem;
+  padding-bottom: 8px;
 }
 
 .hero-icons {
@@ -92,8 +96,8 @@ main {
 }
 
 .icon {
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   padding: 8px;
   fill: var(--font-color);
 }
@@ -116,6 +120,7 @@ main {
   background-color: var(--button-bg-color);
   color: var(--hero-text-color);
   border: solid 1px transparent;
+  margin-left: 8px;
 }
 
 .button:hover {
@@ -127,9 +132,11 @@ main {
 
 .hero > p {
   color: white;
+  padding-top: 16px;
 }
 
-.nav-down {
+.nav-down,
+.nav-up {
   display: flex;
   width: 100;
   justify-content: center;

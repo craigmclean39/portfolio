@@ -1,10 +1,13 @@
 import NavDown from './navDown';
+import NavUp from './navUp';
 
 const AboutMe: React.FC = () => {
   return (
     <section id='AboutMe'>
       <div className='content'>
+        <NavUp href='#Header' />
         <h3>About Me</h3>
+
         <p>
           Hi, my name is Craig McLean. I'm a father, climber, sailor,
           adventurer, and software developer. I've recently been honing my

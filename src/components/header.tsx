@@ -2,7 +2,7 @@ import '../css/styles.css';
 
 const Header: React.FC = () => {
   return (
-    <header>
+    <header id='Header'>
       <div className='inner-header'>
         <h1>{`< CRAIG / >`}</h1>
       </div>

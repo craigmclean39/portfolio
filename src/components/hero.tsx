@@ -6,7 +6,7 @@ import NavDown from './navDown';
 const Hero: React.FC = () => {
   return (
     <section>
-      <div className='hero'>
+      <div className='hero' id='Hero'>
         <h1 className='hero-title'>
           Hi, I'm <span className='hero-name'>Craig</span>
         </h1>
