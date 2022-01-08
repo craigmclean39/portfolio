@@ -1,26 +1,27 @@
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
-import geoJson from '../data/mapdata.json';
-import { Hop } from '../types/trace';
 import { FeatureCollection } from '../types/d3Types';
 import { geoJsonFilter } from '../utilities/geoJsonUtils';
 import '../css/map.css';
+import { Country } from '../types/geoTypes';
 
 export interface MapProps {
-  traceData: Hop[];
+  countryData: Country[];
 }
 
-const Map: React.FC<MapProps> = ({ traceData }) => {
+const Map: React.FC<MapProps> = ({ countryData }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [pathElements, setPathElements] = useState(null);
-  const [geoJsonReady, setGeoJsonReady] = useState(false);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
-  let projection: any = useRef(
+  /* let projection: any = useRef(
     d3.geoMercator().fitSize([width, height], geoJson as any)
   );
-  let pathGenerator: any = useRef(d3.geoPath().projection(projection));
+  let pathGenerator: any = useRef(d3.geoPath().projection(projection)); */
+
+  const projection: any = useRef(null);
+  const pathGenerator: any = useRef(null);
 
   useEffect(() => {
     if (svgRef.current) {
@@ -30,69 +31,36 @@ const Map: React.FC<MapProps> = ({ traceData }) => {
     }
   }, [svgRef]);
 
-  // The geoJSON file takes a while to load, even though it is a local file, it's quite large
-  // this useEffect will kickoff the convertGeoJsonToPaths function after we are sure
-  // that the json file is loaded
   useEffect(() => {
-    async function fetchMapData() {
-      await fetch('../data/mapdata.json');
-      setGeoJsonReady(true);
+    if (countryData.length > 0) {
+      let featureCollection = {
+        type: 'FeatureCollection',
+        features: [],
+      } as FeatureCollection;
+
+      countryData.forEach((country) => {
+        featureCollection.features.push(country);
+      });
+
+      projection.current = d3
+        .geoAlbers()
+        .fitSize([width, height], featureCollection as any);
+      pathGenerator.current = d3.geoPath().projection(projection.current);
+
+      const paths = featureCollection.features.map((d: any, index: number) => {
+        return (
+          <path
+            key={'path' + index}
+            d={pathGenerator.current(d.geometry)}
+            fill='var(--map-bg-color)'
+            stroke='var(--map-border-color)'
+          />
+        );
+      });
+
+      setPathElements(paths as any);
     }
-
-    fetchMapData();
-  }, []);
-
-  useEffect(() => {
-    if (geoJsonReady && traceData.length > 0) {
-      covertGeoJsonToPaths();
-    }
-  }, [traceData, geoJsonReady]);
-
-  const covertGeoJsonToPaths = () => {
-    console.log(traceData);
-    // When calling the fitSize function on the projection, we need a collection of features,
-    // this is the format that the function expects
-    let featureCollection = {
-      type: 'FeatureCollection',
-      features: [],
-    } as FeatureCollection;
-
-    // Here we can filter features based on any info, then add them to the feature collection
-    // This will allow us to fit only the filtered features in the map
-    // Currently filtering based on countries present in our trace hop data
-    const propertyValues = traceData.map((hop) => {
-      return hop.country;
-    });
-
-    const filteredFeatures = geoJsonFilter(geoJson, [
-      { propertyName: 'iso_a2', propertyValues: propertyValues },
-    ]);
-
-    filteredFeatures.forEach((feature: any) =>
-      featureCollection.features.push(feature)
-    );
-
-    // create new project and pathGenerator based on the features in the featureCollection
-    projection.current = d3
-      .geoAlbers()
-      .fitSize([width, height], featureCollection as any);
-    pathGenerator.current = d3.geoPath().projection(projection.current);
-
-    // create the individual paths
-    const paths = filteredFeatures.map((d: any, index: number) => {
-      console.log(d);
-      return (
-        <path
-          key={'path' + index}
-          d={pathGenerator.current(d as any)}
-          fill='var(--map-bg-color)'
-          stroke='var(--map-border-color)'
-        />
-      );
-    });
-
-    setPathElements(paths as any);
-  };
+  }, [countryData, width, height]);
 
   const handleClick = (e: any) => {
     console.log(e);

@@ -5,12 +5,12 @@ import './css/styles.css';
 import { useEffect, useState } from 'react';
 import Map from './components/map';
 import axios from 'axios';
-import { Hop } from './types/trace';
 import Body from './components/body';
 import Header from './components/header';
+import { Country } from './types/geoTypes';
 
 function App() {
-  const [traceData, setTraceData] = useState<Hop[]>([]);
+  const [countryData, setCountryData] = useState<Country[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -23,18 +23,14 @@ function App() {
           responseType: 'json',
         });
 
-        // console.log(response);
+        const countries: Country[] = [];
+        response.data.forEach((country: Country[]) => {
+          countries.push(country[0]);
+        });
 
-        setTraceData(response.data);
+        setCountryData(countries);
       } catch (error) {
-        setTraceData([
-          {
-            country: 'CA',
-            city: 'Squamish',
-            ll: [0, 0],
-            time: 0,
-          },
-        ]);
+        console.log(error);
       }
     }
 
@@ -45,7 +41,7 @@ function App() {
       <Header />
       <Body />
       <div className='map-overlay'></div>
-      <Map traceData={traceData} />
+      <Map countryData={countryData} />
     </div>
   );
 }
