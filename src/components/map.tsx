@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
 import { FeatureCollection } from '../types/d3Types';
-import { geoJsonFilter } from '../utilities/geoJsonUtils';
 import '../css/map.css';
 import { Country } from '../types/geoTypes';
 
