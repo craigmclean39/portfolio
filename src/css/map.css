@@ -1,11 +1,11 @@
 :root {
   --map-bg-color: #212f45;
   --map-border-color: #006466;
-  --map-overlay-color: rgba(39, 38, 64, 0.25);
+  --map-overlay-color: rgba(39, 38, 64, 0.5);
 }
 
 .map-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -25,7 +25,7 @@
 
 .map-overlay {
   z-index: 500;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;

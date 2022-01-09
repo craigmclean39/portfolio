@@ -38,10 +38,10 @@ function App() {
   }, []);
   return (
     <div className='App'>
-      <Header />
-      <Body />
       <div className='map-overlay'></div>
       <Map countryData={countryData} />
+      <Header />
+      <Body />
     </div>
   );
 }
