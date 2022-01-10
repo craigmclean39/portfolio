@@ -7,10 +7,11 @@ import Map from './components/map';
 import axios from 'axios';
 import Body from './components/body';
 import Header from './components/header';
-import { Country } from './types/geoTypes';
+import { FeatureCollection } from './types/geoTypes';
 
 function App() {
-  const [countryData, setCountryData] = useState<Country[]>([]);
+  const [countryFeatureCollection, setCountryFeatureCollection] =
+    useState<FeatureCollection | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -19,16 +20,14 @@ function App() {
       try {
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:3000/map',
+          url: 'http://localhost:3000/map/api/countries',
           responseType: 'json',
+          params: { countries: ['CA'] },
         });
 
-        const countries: Country[] = [];
-        response.data.forEach((country: Country[]) => {
-          countries.push(country[0]);
-        });
+        console.log(response);
 
-        setCountryData(countries);
+        setCountryFeatureCollection(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -39,7 +38,7 @@ function App() {
   return (
     <div className='App'>
       <div className='map-overlay'></div>
-      <Map countryData={countryData} />
+      <Map countryFeatureCollection={countryFeatureCollection} />
       <Header />
       <Body />
     </div>

@@ -1,14 +1,13 @@
 import * as d3 from 'd3';
 import { useRef, useEffect, useState } from 'react';
-import { FeatureCollection } from '../types/d3Types';
 import '../css/map.css';
-import { Country } from '../types/geoTypes';
+import { FeatureCollection } from '../types/geoTypes';
 
 export interface MapProps {
-  countryData: Country[];
+  countryFeatureCollection: FeatureCollection | null;
 }
 
-const Map: React.FC<MapProps> = ({ countryData }) => {
+const Map: React.FC<MapProps> = ({ countryFeatureCollection }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [pathElements, setPathElements] = useState(null);
   const [width, setWidth] = useState(0);
@@ -31,35 +30,28 @@ const Map: React.FC<MapProps> = ({ countryData }) => {
   }, [svgRef]);
 
   useEffect(() => {
-    if (countryData.length > 0) {
-      let featureCollection = {
-        type: 'FeatureCollection',
-        features: [],
-      } as FeatureCollection;
+    projection.current = d3
+      .geoAlbers()
+      .fitSize([width, height], countryFeatureCollection as any);
+    pathGenerator.current = d3.geoPath().projection(projection.current);
 
-      countryData.forEach((country) => {
-        featureCollection.features.push(country);
-      });
-
-      projection.current = d3
-        .geoAlbers()
-        .fitSize([width, height], featureCollection as any);
-      pathGenerator.current = d3.geoPath().projection(projection.current);
-
-      const paths = featureCollection.features.map((d: any, index: number) => {
-        return (
-          <path
-            key={'path' + index}
-            d={pathGenerator.current(d.geometry)}
-            fill='var(--map-bg-color)'
-            stroke='var(--map-border-color)'
-          />
-        );
-      });
+    if (countryFeatureCollection != null) {
+      const paths = countryFeatureCollection.features.map(
+        (d: any, index: number) => {
+          return (
+            <path
+              key={'path' + index}
+              d={pathGenerator.current(d.geometry)}
+              fill='var(--map-bg-color)'
+              stroke='var(--map-border-color)'
+            />
+          );
+        }
+      );
 
       setPathElements(paths as any);
     }
-  }, [countryData, width, height]);
+  }, [countryFeatureCollection, width, height]);
 
   const handleClick = (e: any) => {
     console.log(e);

@@ -10,9 +10,20 @@ export interface MultiPolygon {
   coordinates: [[[[Number]]]];
 }
 
-export interface Country {
-  _id: string;
+export interface CountryProperties {
   name: string;
   iso_a2: string;
+}
+
+export interface Country {
+  _id: string;
+  type: string;
+  properties: CountryProperties;
   geometry: Polygon | MultiPolygon;
+}
+
+export interface FeatureCollection {
+  _id: string;
+  type: string;
+  features: [];
 }
