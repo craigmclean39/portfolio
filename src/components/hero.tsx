@@ -10,7 +10,7 @@ const Hero: React.FC = () => {
         <h1 className='hero-title'>
           Hi, I'm <span className='hero-name'>Craig</span>
         </h1>
-        <h3 className='hero-subtitle'>A Software Developer</h3>
+        <h2 className='hero-subtitle'>A Software Developer</h2>
 
         <div className='hero-icons'>
           <a

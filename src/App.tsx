@@ -15,12 +15,13 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      // console.log('trying to fetch data');
+      console.log('trying to fetch data');
 
       try {
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:3000/map/api/countries',
+          //url: 'http://127.0.0.1:3000/api/map/countries',
+          url: 'https://www.craigmclean.dev/api/map/countries',
           responseType: 'json',
           params: { countries: ['CA'] },
         });
