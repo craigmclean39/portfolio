@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { geoPath, geoAlbers } from 'd3';
 import { useRef, useEffect, useState } from 'react';
 import '../css/map.css';
 import { FeatureCollection } from '../types/geoTypes';
@@ -30,10 +30,11 @@ const Map: React.FC<MapProps> = ({ countryFeatureCollection }) => {
   }, [svgRef]);
 
   useEffect(() => {
-    projection.current = d3
-      .geoAlbers()
-      .fitSize([width, height], countryFeatureCollection as any);
-    pathGenerator.current = d3.geoPath().projection(projection.current);
+    projection.current = geoAlbers().fitSize(
+      [width, height],
+      countryFeatureCollection as any
+    );
+    pathGenerator.current = geoPath().projection(projection.current);
 
     if (countryFeatureCollection != null) {
       const paths = countryFeatureCollection.features.map(
