@@ -21,7 +21,8 @@ const Project: React.FC<ProjectProps> = ({
   const listItems = description.map((desc, index) => {
     return (
       <li className='description-list-item' key={index}>
-        {desc}
+        <span className='description-bullet'>{'- '}</span>
+        {`${desc}`}
       </li>
     );
   });
@@ -30,7 +31,7 @@ const Project: React.FC<ProjectProps> = ({
     <article>
       <div className='project-title-flex'>
         <a className='title-link' href={demoUrl} target='_blank'>
-          <h4>{title}</h4>
+          <h3>{title}</h3>
         </a>
         <a className='link' href={demoUrl} target='_blank'>
           Demo

@@ -6,7 +6,7 @@ const AboutMe: React.FC = () => {
     <section id='AboutMe'>
       <div className='content'>
         <NavUp href='#Header' />
-        <h3>About Me</h3>
+        <h2>About Me</h2>
 
         <p>
           Hi, my name is Craig McLean. I'm a father, climber, sailor,
@@ -19,7 +19,8 @@ const AboutMe: React.FC = () => {
           enjoyed by millions of gamers across the world. I took a break from
           game development and learned to sail, I then worked on cargo ships and
           ferries around the world and across Canada. However my passion for
-          technology and solving problems with software has never abated.
+          technology and solving problems with software has never waned and I'm
+          looking to transition back into tech.
         </p>
       </div>
       <NavDown href='#Projects' />

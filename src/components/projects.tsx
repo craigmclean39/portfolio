@@ -77,7 +77,7 @@ const Projects: React.FC = () => {
     <section id='Projects'>
       <div className='content'>
         <NavUp href='#AboutMe' />
-        <h3>Projects</h3>
+        <h2>Projects</h2>
         <Project {...instaclone} />
         <hr></hr>
         <Project {...resumecreator} />

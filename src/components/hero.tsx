@@ -10,7 +10,7 @@ const Hero: React.FC = () => {
         <h1 className='hero-title'>
           Hi, I'm <span className='hero-name'>Craig</span>
         </h1>
-        <h2 className='hero-subtitle'>A Software Developer</h2>
+        <p className='hero-subtitle'>A Software Developer</p>
 
         <div className='hero-icons'>
           <a
@@ -30,8 +30,8 @@ const Hero: React.FC = () => {
           </a>
         </div>
         <p>
-          I'm a passionate, detail oriented, software developer. I enjoy making
-          sites responsive and experimenting with different technologies.
+          I'm a passionate and detail oriented software developer. I enjoy
+          making sites responsive and experimenting with different technologies.
         </p>
       </div>
       <NavDown href='#AboutMe' />
